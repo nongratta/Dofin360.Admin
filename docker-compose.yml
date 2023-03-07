@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+     dofin5.2-admin-mongo:
+       image: "mongo:4.4.14-focal"
+       container_name: dofin5.2-admin-mongo
+       restart: always
+       ports:
+         - 27163:27017
+       networks:
+         - dofin5.admin.net
+       volumes:
+         - /mnt/dofin5.2-mongodb/database:/data/db
+     dofin5.2-admin:
+       image: git.prima-inform.ru:4567/dofin/dofin360.admin:v0.0.0.1
+       container_name: dofin5.2-admin
+       environment:          
+          DofinDB: mongodb://dofin5.2-admin-mongo/dofin
+       ports:
+         - 11849:80
+       restart: always
+       networks:
+         - dofin5.admin.net     
+volumes:
+  data:
+    driver: local
+networks:
+  dofin5.admin.net:
